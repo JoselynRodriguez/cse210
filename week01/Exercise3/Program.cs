@@ -6,7 +6,9 @@ class Program
     {
         Console.WriteLine("Hello World! This is the Exercise3 Project.");
 
-        int number = 18;
+        Random randomGenerator = new Random();
+        int number = randomGenerator.Next(1, 101);
+
         int guess = -1;
         while (number != guess)
         {
