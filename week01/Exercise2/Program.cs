@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices.Marshalling;
 
 class Program
 {
@@ -12,6 +13,7 @@ class Program
         int x = int.Parse(percentage);
 
         string letter = "";
+        string sign = "";
 
         if (x >= 90)
         {
@@ -31,10 +33,28 @@ class Program
         }
         else
         {
-            letter = "F";;
+            letter = "F";
         }
 
-        Console.WriteLine($"Your grade is: {letter}");
+        int digit = x % 10;
+
+        if (letter != "A" && letter != "F")
+        {
+            if (digit >= 7)
+            {
+                sign = "+";
+            }
+            else if (digit < 3)
+            {
+                sign = "-";
+            }
+        }
+        else if (letter == "A" && x < 93)
+        {
+            sign = "-";
+        }
+
+        Console.WriteLine($"Your grade is: {sign}{letter}");
 
         if (x >= 70)
         {
@@ -44,5 +64,9 @@ class Program
         {
             Console.WriteLine("Sorry, You need to try again. You can do it!");
         }
+
+        
+
+        
     }
 }
