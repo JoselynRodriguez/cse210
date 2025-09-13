@@ -2,10 +2,14 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-
 public class Journal
 {
     public List<Entry> _entries;
+
+     public Journal()
+    {
+        _entries = new List<Entry>();
+    }
 
     public void AddEntry(Entry newEntry)
     {
@@ -20,21 +24,22 @@ public class Journal
         }
     }
 
-    public void SaveToFile(string filename)
-    
-    { using (StreamWriter writer = new StreamWriter(filename))
+    public void SaveToFile(string file ="journal.txt")
+    {
+         using (StreamWriter outputFile = new StreamWriter(file))
         {
             foreach (Entry entry in _entries)
             {
-                writer.WriteLine(entry.FormatForFile());
+                outputFile.WriteLine(entry.FormatForFile());
             }
         }
     }
 
-    public void LoadFromFile(string filename)
+    public void LoadFromFile(string file ="journal.txt")
     {
-        _entries.Clear();
-        string[] lines = File.ReadAllLines(filename);
+       _entries.Clear();
+        string[] lines = File.ReadAllLines(file);
+
         foreach (string line in lines)
         {
             Entry entry = Entry.ParseFromFile(line);
@@ -44,5 +49,4 @@ public class Journal
             }
         }
     }
-    
 }
