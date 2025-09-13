@@ -22,7 +22,7 @@ public class Journal
 
     public void SaveToFile(string filename)
     
- { using (StreamWriter writer = new StreamWriter(filename))
+    { using (StreamWriter writer = new StreamWriter(filename))
         {
             foreach (Entry entry in _entries)
             {
