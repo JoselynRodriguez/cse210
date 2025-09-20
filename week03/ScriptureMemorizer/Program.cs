@@ -39,9 +39,9 @@ class Program
         return new List<Scripture>
          {
              new Scripture(new Reference("Proverbs", 3, 5, 6),
-                 "Trust in the Lord with all thine heart and lean not unto thine own understanding."),
+                 "Trust in the Lord with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths."),
              new Scripture(new Reference("John", 3, 16),
-                 "For God so loved the world that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life."),
+                 "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life."),
              new Scripture(new Reference("Enos", 1, 4),
                  "And my soul hungered; and I kneeled down before my Maker, and I cried unto him in mighty prayer and supplication for mine own soul; and all the day long did I cry unto him; yea, and when the night came I did still raise my voice high that it reached the heavens."),
          };
