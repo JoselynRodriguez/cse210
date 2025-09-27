@@ -13,11 +13,17 @@ public class Product
         _productId = productId;
         _price = price;
         _quantity = quantity;
+
     }
 
     public double GetTotalCost()
     {
         return _price * _quantity;
+    }
+
+    public string GetPackingLabel()
+    {
+        return $"{_name} ID: {_productId} Price: {_price} Quanrity: {_quantity}";
     }
 
 }

@@ -39,17 +39,17 @@ public class Order
     
     public string GetPackingLabel()
     {
-        string label = "Packing Label:";
+        string label = "Packing Label:\n";
         foreach (Product product in _products)
         {
-            label += GetPackingLabel() ;
+            label += product.GetPackingLabel() + "\n";
         }
         return label;
     }
 
     public string GetShippingLabel()
     {
-        return "Shipping Label:" + _customer.GetShippingLabel();
+        return "Shipping Label:\n" + _customer.GetShippingLabel();
     }
 
 
