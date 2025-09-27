@@ -16,6 +16,8 @@ class Program
         Console.WriteLine(order1.GetShippingLabel());
         Console.WriteLine($"Total Price: ${order1.GetTotalPrice():0.00} ");
 
+        Console.WriteLine(" ");
+
         Address address2 = new Address("456 Maple Ave", "Toronto", "ON", "Canada");
         Customer customer2 = new Customer("Jane Smith", address2);
         Order order2 = new Order(customer2);
