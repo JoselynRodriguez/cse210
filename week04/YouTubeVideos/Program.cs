@@ -42,7 +42,7 @@ class Program
                 Console.WriteLine($"  - {comment._name}: {comment._text}");
             }
 
-            Console.WriteLine(); // Espacio entre videos
+            Console.WriteLine();
         }
     }
 }
