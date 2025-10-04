@@ -1,5 +1,6 @@
 using System;
-
+using System.Collections.Generic;
+using System.Threading;
 public class BreathingActivity : Activity
 {
     public BreathingActivity()
@@ -12,29 +13,17 @@ public class BreathingActivity : Activity
     {
         DisplayStartingMessage();
 
-        Console.WriteLine("Get Ready...");
-        List<string> animationStrigs = new List<string>();
-        animationStrigs.Add("|");
-        animationStrigs.Add("/");
-        animationStrigs.Add("-");
-        animationStrigs.Add("\\");
-        animationStrigs.Add("|");
-        animationStrigs.Add("/");
-        animationStrigs.Add("-");
-        animationStrigs.Add("\\");
-        animationStrigs.Add("|");
-        animationStrigs.Add("/");
-
-        foreach (string s in animationStrigs)
+        int elapsed = 0;
+        while (elapsed < _duration)
         {
-            Console.Write(s);
-            Thread.Sleep(1000);
-            Console.Write("\b \b");
+            Console.WriteLine("Breathe in...");
+            CountDown(4);
+            Console.WriteLine("Breathe out...");
+            CountDown(6);
+            elapsed += 10;
         }
-
-      
-    
-        
-
+        DisplayEndingMessage();
     }
+
+
 }
