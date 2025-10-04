@@ -15,7 +15,6 @@ public class ListingActivity : Activity
     public void Run()
     {
         DisplayStartingMessage();
-        Console.WriteLine("Get Ready...");
         List<string> animationStrigs = new List<string>();
         animationStrigs.Add("|");
         animationStrigs.Add("/");

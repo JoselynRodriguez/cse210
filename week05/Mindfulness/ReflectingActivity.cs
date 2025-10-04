@@ -16,6 +16,8 @@ public class ReflectingActivity : Activity
     {
         DisplayStartingMessage();
         DisplayPrompt();
+        Console.WriteLine("When you have something in mind, press enterlo continue");
+        Console.ReadLine();
         DisplayQuestions();
         DisplayEndingMessage();
     }
@@ -56,9 +58,12 @@ public class ReflectingActivity : Activity
     public void DisplayPrompt()
     {
         Console.WriteLine(GetRandomPrompt());
+        ShowSpinner(5);
     }
     public void DisplayQuestions()
     {
-         Console.WriteLine(GetRandomQuestion());
+        Console.WriteLine(GetRandomQuestion());
+        ShowSpinner(6);
+            
     }
 }
