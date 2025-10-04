@@ -36,7 +36,7 @@ public class ListingActivity : Activity
         }
 
         Console.WriteLine();
-        GetRandomPrompt();  
+        GetRandomPrompt();
         Console.WriteLine(GetRandomPrompt());
         CountDown(3);
 
@@ -62,10 +62,12 @@ public class ListingActivity : Activity
         return _prompts[rand.Next(_prompts.Count)];
 
     }
+
     public List<string> GetListFromUser()
     {
         List<string> items = new List<string>();
         DateTime endTime = DateTime.Now.AddSeconds(_duration);
+
         while (DateTime.Now < endTime)
         {
             Console.Write(">");
@@ -73,6 +75,7 @@ public class ListingActivity : Activity
             if (!string.IsNullOrWhiteSpace(input))
                 items.Add(input);
         }
+
         return items;
     }
 
