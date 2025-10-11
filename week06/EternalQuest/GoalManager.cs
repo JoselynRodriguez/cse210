@@ -7,46 +7,60 @@ public class GoalManager {
     private int _score = 0;
 
     public void Start() {
+        DisplayPlayerInfo();
         bool running = true;
         while (running) {
             Console.WriteLine("\nMenu:");
-            Console.WriteLine("1. Create Goal");
-            Console.WriteLine("2. Record Event");
-            Console.WriteLine("3. Display Goals");
-            Console.WriteLine("4. Display Score");
-            Console.WriteLine("5. Save Goals");
-            Console.WriteLine("6. Load Goals");
-            Console.WriteLine("7. Exit");
+            Console.WriteLine("1. Create New Goal");
+            Console.WriteLine("2. List Goals");
+            Console.WriteLine("3. Save Goals");
+            Console.WriteLine("4. Load Goals");
+            Console.WriteLine("5. Record Event");
+            Console.WriteLine("6. Quit");
 
+            Console.Write("Select a choice from the menu: ");
             string choice = Console.ReadLine();
             switch (choice) {
                 case "1": CreateGoal(); break;
-                case "2": RecordEvent(); break;
-                case "3": DisplayGoals(); break;
-                case "4": DisplayPlayerInfo(); break;
-                case "5": SaveGoals(); break;
-                case "6": LoadGoals(); break;
-                case "7": running = false; break;
+                case "2": ListGoals(); break;
+                case "3": SaveGoals(); break;
+                case "4": LoadGoals(); break;
+                case "5": RecordEvent(); break;
+                case "6": running = false; break;
+                default: Console.WriteLine("Invalid choice."); break;
             }
         }
     }
 
     public void DisplayPlayerInfo() {
-        Console.WriteLine($"Score: {_score}");
+        Console.WriteLine($"\nYou have: {_score} points");
     }
 
-    public void DisplayGoals() {
+    public void ListGoals() {
+        Console.WriteLine("\nThe Goals are:");
         for (int i = 0; i < _goals.Count; i++) {
-            Console.WriteLine($"{i + 1}. {_goals[i].GetDetailsString()}");
+            string status = _goals[i].IsComplete() ? "[X]" : "[ ]";
+            Console.WriteLine($"{i + 1}. {status} {_goals[i].GetDetailsString()}");
         }
+        DisplayPlayerInfo();
     }
 
     public void RecordEvent() {
-        DisplayGoals();
-        Console.Write("Which goal did you complete? ");
-        int index = int.Parse(Console.ReadLine()) - 1;
-        if (index >= 0 && index < _goals.Count) {
-            _goals[index].RecordEvent();
+        ListGoals();
+        Console.Write("\nWhich goal did you accomplish? ");
+        if (int.TryParse(Console.ReadLine(), out int index)) {
+            index -= 1;
+            if (index >= 0 && index < _goals.Count) {
+                int before = _score;
+                _goals[index].RecordEvent(ref _score);
+                int earned = _score - before;
+                Console.WriteLine($"🎉 Congratulations! You earned {earned} points.");
+                Console.WriteLine($"🏆 You now have {_score} points.");
+            } else {
+                Console.WriteLine("Invalid goal number.");
+            }
+        } else {
+            Console.WriteLine("Invalid input.");
         }
     }
 
@@ -57,45 +71,72 @@ public class GoalManager {
                 writer.WriteLine(goal.GetStringRepresentation());
             }
         }
+        Console.WriteLine("Goals saved successfully.");
     }
 
     public void LoadGoals() {
-        string[] lines = File.ReadAllLines("goals.txt");
+        string filename = "goals.txt";
+        if (!File.Exists(filename)) {
+            Console.WriteLine("No saved goals found.");
+            return;
+        }
+
+        string[] lines = File.ReadAllLines(filename);
         _score = int.Parse(lines[0]);
         _goals.Clear();
 
         for (int i = 1; i < lines.Length; i++) {
-            string[] parts = lines[i].Split(":");
-            string type = parts[0];
-            string[] data = parts[1].Split(",");
+            string[] parts = lines[i].Split(",");
 
-            switch (type) {
-                case "SimpleGoal":
-                    _goals.Add(new SimpleGoal(data[0], data[1], int.Parse(data[2])) {
-                        // manually set _isComplete if needed
-                    });
-                    break;
-                case "EternalGoal":
-                    _goals.Add(new EternalGoal(data[0], data[1], int.Parse(data[2])));
-                    break;
-                case "ChecklistGoal":
-                    ChecklistGoal cg = new ChecklistGoal(data[0], data[1], int.Parse(data[2]),
-                                                         int.Parse(data[3]), int.Parse(data[4]));
-                    while (cg.IsComplete() == false && cg.GetStringRepresentation().EndsWith(data[5]) == false) {
-                        cg.RecordEvent(); // simulate progress
-                    }
-                    _goals.Add(cg);
-                    break;
+            string type = parts[0];
+
+            if (type == "SimpleGoal") {
+                string name = parts[1];
+                string desc = parts[2];
+                int points = int.Parse(parts[3]);
+                bool isComplete = bool.Parse(parts[4]);
+
+                SimpleGoal sg = new SimpleGoal(name, desc, points);
+                if (isComplete) sg.RecordEvent(ref _score);
+                _goals.Add(sg);
+            }
+            else if (type == "EternalGoal") {
+                string name = parts[1];
+                string desc = parts[2];
+                int points = int.Parse(parts[3]);
+
+                _goals.Add(new EternalGoal(name, desc, points));
+            }
+            else if (type == "ChecklistGoal") {
+                string name = parts[1];
+                string desc = parts[2];
+                int points = int.Parse(parts[3]);
+                int target = int.Parse(parts[4]);
+                int bonus = int.Parse(parts[5]);
+                int completed = int.Parse(parts[6]);
+
+                ChecklistGoal cg = new ChecklistGoal(name, desc, points, target, bonus);
+                _goals.Add(cg);
             }
         }
+
+        Console.WriteLine("Goals loaded successfully.");
     }
 
     private void CreateGoal() {
-        Console.WriteLine("Choose type: 1. Simple 2. Eternal 3. Checklist");
+        Console.WriteLine("\nThe types of goals are:");
+        Console.WriteLine("1. Simple Goal");
+        Console.WriteLine("2. Eternal Goal");
+        Console.WriteLine("3. Checklist Goal");
+        Console.Write("Which type of goal would you like to create: ");
         string type = Console.ReadLine();
-        Console.Write("Name: "); string name = Console.ReadLine();
-        Console.Write("Description: "); string desc = Console.ReadLine();
-        Console.Write("Points: "); int points = int.Parse(Console.ReadLine());
+
+        Console.Write("What is the name of your goal? ");
+        string name = Console.ReadLine();
+        Console.Write("What is a short description of it? ");
+        string desc = Console.ReadLine();
+        Console.Write("What is the amount of points associated with this goal? ");
+        int points = int.Parse(Console.ReadLine());
 
         switch (type) {
             case "1":
@@ -105,9 +146,14 @@ public class GoalManager {
                 _goals.Add(new EternalGoal(name, desc, points));
                 break;
             case "3":
-                Console.Write("Target count: "); int target = int.Parse(Console.ReadLine());
-                Console.Write("Bonus: "); int bonus = int.Parse(Console.ReadLine());
+                Console.Write("How many times does this goal need to be accomplished? ");
+                int target = int.Parse(Console.ReadLine());
+                Console.Write("What is the bonus for completing it? ");
+                int bonus = int.Parse(Console.ReadLine());
                 _goals.Add(new ChecklistGoal(name, desc, points, target, bonus));
+                break;
+            default:
+                Console.WriteLine("Invalid goal type.");
                 break;
         }
     }

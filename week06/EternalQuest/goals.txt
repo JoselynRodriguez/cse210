@@ -1,0 +1,4 @@
+0
+SimpleGoal, give a talk,sacrament meeting,50,False
+EternalGoal, study the scriptures,10 minutes,50
+ChecklistGoal, temple,visit the temple 3 times,3,3,0,0
